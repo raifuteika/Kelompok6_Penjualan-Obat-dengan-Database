@@ -8,14 +8,16 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Apotek Pintar</h1>
+    <div class="sidebar">
+        <div class="logo">
+            <h1>APOTEK PINTAR</h1>
+        </div>
         <nav>
             <a href="index.php">Daftar Obat</a>
             <a href="transaksi.php" class="active">Transaksi</a>
             <a href="report.php">Laporan</a>
         </nav>
-    </header>
+    </div>
 
     <main>
         <section>
@@ -34,29 +36,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $result = $conn->query("
-                        SELECT transaksi.*, obat.nama 
-                        FROM transaksi 
-                        JOIN obat ON transaksi.id_obat = obat.id_obat 
-                        ORDER BY transaksi.tgl_transaksi DESC
-                    ");
-                    
-                    while ($row = $result->fetch_assoc()) {
-                        echo "<tr>";
-                        echo "<td>{$row['id_transaksi']}</td>";
-                        echo "<td>{$row['tgl_transaksi']}</td>";
-                        echo "<td>{$row['nama']}</td>";
-                        echo "<td>{$row['jumlah']}</td>";
-                        echo "<td>".number_format($row['total_transaksi'])."</td>";
-                        echo "<td>
-                            <a href='add_transaksi.php?id={$row['id_transaksi']}' class='btn-edit'>Edit</a> | 
-                            <a href='delete_transaksi.php?id={$row['id_transaksi']}' class='btn-delete' onclick='return confirm(\"Apakah Anda yakin?\")'>Hapus</a>
-                          </td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
+    <?php
+    $result = $conn->query("SELECT transaksi.*, obat.nama FROM transaksi JOIN obat ON transaksi.id_obat = obat.id_obat ORDER BY transaksi.tgl_transaksi DESC");
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>{$row['id_transaksi']}</td>";
+        echo "<td>{$row['tgl_transaksi']}</td>";
+        echo "<td>{$row['nama']}</td>";
+        echo "<td>{$row['jumlah']}</td>";
+        echo "<td>".number_format($row['total_transaksi'])."</td>";
+        echo "<td>
+            <button class='btn-edit' onclick=\"location.href='add_transaksi.php?id={$row['id_transaksi']}'\">Edit</button> 
+            <button class='btn-delete' onclick=\"if(confirm('Apakah Anda yakin?')) location.href='delete_transaksi.php?id={$row['id_transaksi']}'\">Hapus</button>
+          </td>";
+        echo "</tr>";
+    }
+    ?>
+</tbody>
             </table>
         </section>
     </main>

@@ -25,17 +25,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Apotek Pintar</h1>
+    <div class="sidebar">
+        <div class="logo">
+            <h1>APOTEK PINTAR</h1>
+        </div>
         <nav>
             <a href="index.php">Daftar Obat</a>
             <a href="transaksi.php">Transaksi</a>
             <a href="report.php">Laporan</a>
         </nav>
-    </header>
+    </div>
 
-    <main>
-        <section>
+    <main class="tambah-obat-main">
+        <div class="form-container">
             <h2>Tambah Obat Baru</h2>
             <form method="POST">
                 <div class="form-group">
@@ -60,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <button type="submit" class="btn-submit">Simpan</button>
             </form>
-        </section>
+        </div>
     </main>
 </body>
 </html>

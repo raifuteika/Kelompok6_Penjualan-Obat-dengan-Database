@@ -3,12 +3,7 @@ include 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     $id_transaksi = $_GET['id'];
-    $result = $conn->query("
-        SELECT transaksi.*, obat.nama, obat.stok, obat.harga 
-        FROM transaksi 
-        JOIN obat ON transaksi.id_obat = obat.id_obat 
-        WHERE transaksi.id_transaksi = $id_transaksi
-    ");
+    $result = $conn->query("SELECT transaksi.*, obat.nama, obat.stok, obat.harga FROM transaksi JOIN obat ON transaksi.id_obat = obat.id_obat WHERE transaksi.id_transaksi = $id_transaksi");
     $transaksi = $result->fetch_assoc();
 }
 
@@ -25,18 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     if ($id_transaksi) {
         // Update transaksi
-        $stmt = $conn->prepare("
-            UPDATE transaksi 
-            SET tgl_transaksi = ?, id_obat = ?, jumlah = ?, total_transaksi = ? 
-            WHERE id_transaksi = ?
-        ");
+        $stmt = $conn->prepare("UPDATE transaksi SET tgl_transaksi = ?, id_obat = ?, jumlah = ?, total_transaksi = ? WHERE id_transaksi = ?");
         $stmt->bind_param("siiid", $tgl_transaksi, $id_obat, $jumlah, $total_transaksi, $id_transaksi);
     } else {
         // Tambah transaksi baru
-        $stmt = $conn->prepare("
-            INSERT INTO transaksi (tgl_transaksi, id_obat, jumlah, total_transaksi) 
-            VALUES (?, ?, ?, ?)
-        ");
+        $stmt = $conn->prepare("INSERT INTO transaksi (tgl_transaksi, id_obat, jumlah, total_transaksi) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("siii", $tgl_transaksi, $id_obat, $jumlah, $total_transaksi);
     }
     
@@ -62,17 +50,19 @@ while ($row = $result_obat->fetch_assoc()) {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Apotek Pintar</h1>
+    <div class="sidebar">
+        <div class="logo">
+            <h1>APOTEK PINTAR</h1>
+        </div>
         <nav>
             <a href="index.php">Daftar Obat</a>
             <a href="transaksi.php">Transaksi</a>
             <a href="report.php">Laporan</a>
         </nav>
-    </header>
+    </div>
 
-    <main>
-        <section>
+    <main class="tambah-transaksi-main">
+        <div class="form-container">
             <h2><?php echo isset($id_transaksi) ? 'Edit' : 'Tambah'; ?> Transaksi</h2>
             <form action="add_transaksi.php" method="POST">
                 <?php if (isset($id_transaksi)): ?>
@@ -81,16 +71,14 @@ while ($row = $result_obat->fetch_assoc()) {
                 
                 <div class="form-group">
                     <label for="tgl_transaksi">Tanggal Transaksi:</label>
-                    <input type="date" id="tgl_transaksi" name="tgl_transaksi" 
-                           value="<?php echo isset($id_transaksi) ? $transaksi['tgl_transaksi'] : date('Y-m-d'); ?>" required>
+                    <input type="date" id="tgl_transaksi" name="tgl_transaksi" value="<?php echo isset($id_transaksi) ? $transaksi['tgl_transaksi'] : date('Y-m-d'); ?>" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="id_obat">Obat:</label>
                     <select id="id_obat" name="id_obat" required>
                         <?php foreach ($obat_list as $obat): ?>
-                            <option value="<?php echo $obat['id_obat']; ?>" 
-                                    <?php echo isset($id_transaksi) && $transaksi['id_obat'] == $obat['id_obat'] ? 'selected' : ''; ?>>
+                            <option value="<?php echo $obat['id_obat']; ?>" <?php echo isset($id_transaksi) && $transaksi['id_obat'] == $obat['id_obat'] ? 'selected' : ''; ?>>
                                 <?php echo "{$obat['nama']} (Stok: {$obat['stok']})"; ?>
                             </option>
                         <?php endforeach; ?>
@@ -99,13 +87,12 @@ while ($row = $result_obat->fetch_assoc()) {
                 
                 <div class="form-group">
                     <label for="jumlah">Jumlah:</label>
-                    <input type="number" id="jumlah" name="jumlah" 
-                           value="<?php echo isset($id_transaksi) ? $transaksi['jumlah'] : 1; ?>" min="1" required>
+                    <input type="number" id="jumlah" name="jumlah" value="<?php echo isset($id_transaksi) ? $transaksi['jumlah'] : 1; ?>" min="1" required>
                 </div>
                 
                 <button type="submit" class="btn-submit">Simpan</button>
             </form>
-        </section>
+        </div>
     </main>
 </body>
 </html>
