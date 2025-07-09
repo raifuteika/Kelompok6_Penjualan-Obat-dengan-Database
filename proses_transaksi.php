@@ -1,5 +1,6 @@
 <?php
 include 'config.php';
+include 'admin/sequence_helper.php'; // Tambahkan ini
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tgl_transaksi = $_POST['tgl_transaksi'];
@@ -11,9 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $harga = $result->fetch_assoc()['harga'];
     $total_transaksi = $harga * $jumlah;
     
-    // Tambah transaksi baru
-    $stmt = $conn->prepare("INSERT INTO transaksi (tgl_transaksi, id_obat, jumlah, total_transaksi) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("siii", $tgl_transaksi, $id_obat, $jumlah, $total_transaksi);
+    // Generate ID menggunakan sequence
+    $id_transaksi = getNextSequence($conn, 'transaksi_sequence');
+    
+    // Tambah transaksi baru dengan sequence
+    $stmt = $conn->prepare("INSERT INTO transaksi (id_transaksi, tgl_transaksi, id_obat, jumlah, total_transaksi) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("isiii", $id_transaksi, $tgl_transaksi, $id_obat, $jumlah, $total_transaksi);
     
     if ($stmt->execute()) {
         // Kurangi stok obat
@@ -21,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $update_stok->bind_param("ii", $jumlah, $id_obat);
         $update_stok->execute();
         
-        echo "<script>alert('Transaksi berhasil!'); window.location='departments.php';</script>";
+        echo "<script>alert('Transaksi berhasil dengan ID: $id_transaksi'); window.location='departments.php';</script>";
     } else {
         echo "<script>alert('Transaksi gagal!'); window.location='departments.php';</script>";
     }

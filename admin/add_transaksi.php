@@ -18,19 +18,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $harga = $result->fetch_assoc()['harga'];
     $total_transaksi = $harga * $jumlah;
     
-    if ($id_transaksi) {
-        // Update transaksi
-        $stmt = $conn->prepare("UPDATE transaksi SET tgl_transaksi = ?, id_obat = ?, jumlah = ?, total_transaksi = ? WHERE id_transaksi = ?");
-        $stmt->bind_param("siiid", $tgl_transaksi, $id_obat, $jumlah, $total_transaksi, $id_transaksi);
-    } else {
-        // Tambah transaksi baru
-        $stmt = $conn->prepare("INSERT INTO transaksi (tgl_transaksi, id_obat, jumlah, total_transaksi) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("siii", $tgl_transaksi, $id_obat, $jumlah, $total_transaksi);
+    try {
+        if ($id_transaksi) {
+            // Update transaksi
+            $stmt = $conn->prepare("UPDATE transaksi SET tgl_transaksi = ?, id_obat = ?, jumlah = ?, total_transaksi = ? WHERE id_transaksi = ?");
+            $stmt->bind_param("siiid", $tgl_transaksi, $id_obat, $jumlah, $total_transaksi, $id_transaksi);
+        } else {
+            // Tambah transaksi baru dengan sequence
+            $id_transaksi = getNextSequence($conn, 'transaksi_sequence');
+            $stmt = $conn->prepare("INSERT INTO transaksi (id_transaksi, tgl_transaksi, id_obat, jumlah, total_transaksi) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("isiii", $id_transaksi, $tgl_transaksi, $id_obat, $jumlah, $total_transaksi);
+        }
+        
+        $stmt->execute();
+        echo "<script>alert('Transaksi berhasil dengan ID: $id_transaksi'); window.location='transaksi.php';</script>";
+        
+    } catch (Exception $e) {
+        echo "<script>alert('Error: " . $e->getMessage() . "'); window.location='add_transaksi.php';</script>";
     }
-    
-    $stmt->execute();
-    header("Location: transaksi.php");
-    exit();
 }
 
 // Ambil daftar obat untuk dropdown
@@ -39,6 +44,8 @@ $obat_list = [];
 while ($row = $result_obat->fetch_assoc()) {
     $obat_list[] = $row;
 }
+?>
+
 ?>
 
 <!DOCTYPE html>
