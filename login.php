@@ -1,13 +1,15 @@
 <?php
-    require 'config.php';
+require 'config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Eclipse Chest</title>
 </head>
+
 <body style="position: relative; margin: 0; 
     background: url('assets/images/baground baru.jpg') 
     no-repeat center; 
@@ -17,8 +19,7 @@
     display: flex; flex-direction: column; 
     align-items: center; justify-content: center; 
     height: 100vh;">
-    <img src="img/logo cat.png" alt=""
-        style="position: absolute; top: 10px; left: 10px; width: 80px; height: auto;">
+    <img src="img/logo cat.png" alt="" style="position: absolute; top: 10px; left: 10px; width: 80px; height: auto;">
     <div style="margin-bottom: 20px;">
         <h1 style="color: white; font-size: 2em; text-shadow: 2px 2px 4px black;">Login Khusus Admin/owner</h1>
     </div>
@@ -32,12 +33,17 @@
                 <input type="text" id="username" name="username" required><br><br>
                 <label for="password">🔑 Password:</label>
                 <input type="password" id="password" name="password" required><br><br>
-                <button style="background: rgb(83, 192, 196); color: white; border: none; padding: 10px; cursor: pointer;"
+                <button
+                    style="background: rgb(83, 192, 196); color: white; border: none; padding: 10px; cursor: pointer;"
                     type="submit" name="login">Masuk</button>
-                <button style="background: rgb(83, 192, 196); color: white; border: none; padding: 10px; cursor: pointer;"
-                    type="submit" name="regist">Regist</button>
+                <a href="registrasi.php">
+                    <button
+                        style="background: rgb(83, 192, 196); color: white; border: none; padding: 10px; cursor: pointer;"
+                        type="button">Regist</button>
+                </a>
             </form>
         </div>
     </fieldset>
 </body>
+
 </html>
