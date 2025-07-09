@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2025 at 02:36 AM
+-- Generation Time: Jul 09, 2025 at 07:43 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,7 +40,32 @@ CREATE TABLE `obat` (
 --
 
 INSERT INTO `obat` (`id_obat`, `nama`, `stok`, `harga`, `kategori`) VALUES
-(1, 'Amoxicilin', 8, 5000.00, 'tablet');
+(1, 'Amoxicilin', 2, 5000.00, 'tablet'),
+(4, 'paracetamol', 2, 30000.00, 'tablet');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `obat_sequence`
+--
+
+CREATE TABLE `obat_sequence` (
+  `next_not_cached_value` bigint(21) NOT NULL,
+  `minimum_value` bigint(21) NOT NULL,
+  `maximum_value` bigint(21) NOT NULL,
+  `start_value` bigint(21) NOT NULL COMMENT 'start value when sequences is created or value if RESTART is used',
+  `increment` bigint(21) NOT NULL COMMENT 'increment value',
+  `cache_size` bigint(21) UNSIGNED NOT NULL,
+  `cycle_option` tinyint(1) UNSIGNED NOT NULL COMMENT '0 if no cycles are allowed, 1 if the sequence should begin a new cycle when maximum_value is passed',
+  `cycle_count` bigint(21) NOT NULL COMMENT 'How many cycles have been done'
+) ENGINE=InnoDB;
+
+--
+-- Dumping data for table `obat_sequence`
+--
+
+INSERT INTO `obat_sequence` (`next_not_cached_value`, `minimum_value`, `maximum_value`, `start_value`, `increment`, `cache_size`, `cycle_option`, `cycle_count`) VALUES
+(1, 1, 999999, 1, 1, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -79,8 +104,16 @@ CREATE TABLE `transaksi` (
 --
 
 INSERT INTO `transaksi` (`id_transaksi`, `tgl_transaksi`, `total_transaksi`, `id_obat`, `jumlah`) VALUES
-(1, '2025-06-18', 5000.00, 1, 1),
-(2, '2025-06-18', 5000.00, 1, 1);
+(2, '2025-06-18', 5000.00, 1, 1),
+(3, '2025-06-26', 150000.00, 4, 5),
+(4, '2025-06-26', 10000.00, 1, 2),
+(5, '2025-06-27', 5000.00, 1, 1),
+(6, '2025-06-28', 5000.00, 1, 1),
+(7, '2025-06-29', 5000.00, 1, 1),
+(8, '2025-06-29', 30000.00, 4, 1),
+(9, '2025-06-30', 5000.00, 1, 1),
+(10, '2025-07-01', 5000.00, 1, 1),
+(11, '2025-07-03', 60000.00, 4, 2);
 
 --
 -- Triggers `transaksi`
@@ -93,6 +126,78 @@ CREATE TRIGGER `tg_transaksi` AFTER INSERT ON `transaksi` FOR EACH ROW BEGIN
 END
 $$
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transaksi_sequence`
+--
+
+CREATE TABLE `transaksi_sequence` (
+  `next_not_cached_value` bigint(21) NOT NULL,
+  `minimum_value` bigint(21) NOT NULL,
+  `maximum_value` bigint(21) NOT NULL,
+  `start_value` bigint(21) NOT NULL COMMENT 'start value when sequences is created or value if RESTART is used',
+  `increment` bigint(21) NOT NULL COMMENT 'increment value',
+  `cache_size` bigint(21) UNSIGNED NOT NULL,
+  `cycle_option` tinyint(1) UNSIGNED NOT NULL COMMENT '0 if no cycles are allowed, 1 if the sequence should begin a new cycle when maximum_value is passed',
+  `cycle_count` bigint(21) NOT NULL COMMENT 'How many cycles have been done'
+) ENGINE=InnoDB;
+
+--
+-- Dumping data for table `transaksi_sequence`
+--
+
+INSERT INTO `transaksi_sequence` (`next_not_cached_value`, `minimum_value`, `maximum_value`, `start_value`, `increment`, `cache_size`, `cycle_option`, `cycle_count`) VALUES
+(1, 1, 999999, 1, 1, 1, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `username` varchar(60) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `role` varchar(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `password`, `role`) VALUES
+(1, 'admin', 'admin', 'admin'),
+(7, 'www', '$2y$10$4PbTXICTnKgA5Rum1/s.yepQHglCc8JRWxtK1WIhAgSBYTOMX4nte', 'admin'),
+(8, 'iki', 'iki', 'admin'),
+(9, 'fadlan', 'fadlan', 'admin'),
+(10, 'bla', 'bla', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_sequence`
+--
+
+CREATE TABLE `user_sequence` (
+  `next_not_cached_value` bigint(21) NOT NULL,
+  `minimum_value` bigint(21) NOT NULL,
+  `maximum_value` bigint(21) NOT NULL,
+  `start_value` bigint(21) NOT NULL COMMENT 'start value when sequences is created or value if RESTART is used',
+  `increment` bigint(21) NOT NULL COMMENT 'increment value',
+  `cache_size` bigint(21) UNSIGNED NOT NULL,
+  `cycle_option` tinyint(1) UNSIGNED NOT NULL COMMENT '0 if no cycles are allowed, 1 if the sequence should begin a new cycle when maximum_value is passed',
+  `cycle_count` bigint(21) NOT NULL COMMENT 'How many cycles have been done'
+) ENGINE=InnoDB;
+
+--
+-- Dumping data for table `user_sequence`
+--
+
+INSERT INTO `user_sequence` (`next_not_cached_value`, `minimum_value`, `maximum_value`, `start_value`, `increment`, `cache_size`, `cycle_option`, `cycle_count`) VALUES
+(1, 1, 999999, 1, 1, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -138,20 +243,10 @@ ALTER TABLE `transaksi`
   ADD KEY `id_obat` (`id_obat`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Indexes for table `user`
 --
-
---
--- AUTO_INCREMENT for table `obat`
---
-ALTER TABLE `obat`
-  MODIFY `id_obat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `transaksi`
---
-ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Constraints for dumped tables

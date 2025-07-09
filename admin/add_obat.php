@@ -1,6 +1,8 @@
 <?php include '../config.php';
+include 'sequence_helper.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id_obat = getNextSequence($conn, 'obat_sequence');
     $nama = $_POST['nama'];
     $stok = $_POST['stok'];
     $harga = $_POST['harga'];
