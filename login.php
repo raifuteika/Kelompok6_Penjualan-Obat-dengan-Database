@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eclipse Chest</title>
+    <title>Login</title>
 </head>
 <body style="position: relative; margin: 0; 
     background: url('assets/images/baground baru.jpg') 
